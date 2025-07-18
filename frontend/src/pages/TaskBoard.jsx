@@ -139,7 +139,8 @@ function TaskBoard() {
     setDescription(task.description);
     setPriority(task.priority);
     setDueDate(task.dueDate?.split('T')[0] || '');
-    setAssignedTo(setAssignedTo(task.assignedTo?._id || ''));
+    setAssignedTo(task.assignedTo?._id || '');
+
 
   };
 
