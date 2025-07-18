@@ -6,7 +6,7 @@ import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { io } from 'socket.io-client';
 
-const socket = io(`${process.env.REACT_APP_API_URL}`); // Backend URL
+const socket = io(`${process.env.REACT_APP_BACKEND_URL}`); // Backend URL
 
 function TaskBoard() {
   const { user } = useContext(AuthContext);
@@ -26,7 +26,7 @@ function TaskBoard() {
 
     const fetchTasks = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/tasks`, {
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/tasks`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         setTasks(res.data);
@@ -37,7 +37,7 @@ function TaskBoard() {
 
     const fetchUsers = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/all`, {
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/users/all`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         setUsers(res.data);
@@ -80,7 +80,7 @@ function TaskBoard() {
 
     try {
       await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/tasks/${taskId}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/tasks/${taskId}`,
         { status: updatedStatus },
         {
           headers: { Authorization: `Bearer ${user.token}` },
@@ -110,12 +110,12 @@ function TaskBoard() {
 
   try {
     if (editingTaskId) {
-      await axios.put(`${process.env.REACT_APP_API_URL}/api/tasks/${editingTaskId}`, taskData, {
+      await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/tasks/${editingTaskId}`, taskData, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       setEditingTaskId(null);
     } else {
-      await axios.post(`${process.env.REACT_APP_API_URL}/api/tasks`, taskData, {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/tasks`, taskData, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
     }
@@ -147,7 +147,7 @@ function TaskBoard() {
     if (!window.confirm('Are you sure you want to delete this task?')) return;
 
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/api/tasks/${taskId}`, {
+      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/tasks/${taskId}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
     } catch (err) {
