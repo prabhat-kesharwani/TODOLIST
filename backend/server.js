@@ -37,6 +37,9 @@ app.use('/api/tasks', require('./routes/taskRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 
 // Socket.IO connection
+app.get('/', (req, res) => {
+  res.send('📝 To-Do Board API is running');
+});
 io.on('connection', (socket) => {
   console.log('📡 User connected:', socket.id);
 
