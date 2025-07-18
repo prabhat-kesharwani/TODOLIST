@@ -8,13 +8,11 @@ require('dotenv').config();
 const app = express();
 const server = http.createServer(app);
 
-// Allowed frontend origins (local + deployed)
 const allowedOrigins = [
-  'http://localhost:3000',
-  process.env.FRONTEND_URL
+  'https://todolist-s5ii.onrender.com',
+  'http://localhost:3000'
 ];
 
-// Configure Socket.io
 const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
@@ -29,17 +27,15 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Attach Socket.IO to Express
 app.set('io', io);
 
-// Routes
 app.use('/api/tasks', require('./routes/taskRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 
-// Socket.IO connection
 app.get('/', (req, res) => {
   res.send('📝 To-Do Board API is running');
 });
+
 io.on('connection', (socket) => {
   console.log('📡 User connected:', socket.id);
 
@@ -48,14 +44,16 @@ io.on('connection', (socket) => {
   });
 });
 
-// MongoDB connection
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => console.log('✅ MongoDB connected'))
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ MongoDB connected'))
   .catch((err) => console.error('❌ MongoDB error:', err));
 
-// Start server
+// Optional error handler middleware
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({ error: 'Something went wrong!' });
+});
+
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
